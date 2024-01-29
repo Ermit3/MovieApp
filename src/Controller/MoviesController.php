@@ -7,7 +7,6 @@ use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MoviesController extends AbstractController
@@ -33,15 +32,27 @@ class MoviesController extends AbstractController
     ]);
   }
 
-  #[Route('/movies/{title}', name: 'app_movies_get', methods: ['GET', 'HEAD'])]
-  public function movie($title): JsonResponse
+  #[Route('/movies/{id}', name: 'movies_show', methods: ['GET', 'HEAD'])]
+  public function show($id): Response
   {
     // findOneBy() - SELECT * FROM movies WHERE id = 6 AND title = 'The Drak Knight' ORDER BY id DESC
-    $movie = $this->repository->findOneBy(['title' => "The Dark Knight"]);
+    $movie = $this->repository->findOneBy(['id' => $id]);
 
     // dd($movie);
-    return $this->render('movies/index.html.twig', [
-      'movies' => $movie,
+    return $this->render('movies/show.html.twig', [
+      'movie' => $movie,
+    ]);
+  }
+
+  #[Route('/movies/edit/{id}/', name: 'movies_edit', methods: ['GET', 'HEAD'])]
+  public function edit($id): Response
+  {
+    // findOneBy() - SELECT * FROM movies WHERE id = 6 AND title = 'The Drak Knight' ORDER BY id DESC
+    $movie = $this->repository->findOneBy(['id' => $id]);
+
+    // dd($movie);
+    return $this->render('movies/show.html.twig', [
+      'movie' => $movie,
     ]);
   }
 }

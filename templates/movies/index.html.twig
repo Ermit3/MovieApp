@@ -8,13 +8,14 @@
 			</h1>
 
 			<span class="font-light text-gray-500 italic">
-				Created by Code With Dary
+				Created by
+				{{author}}
 			</span>
 		</div>
 	</div>
 
 	<div class="mx-auto w-4/5 my-8">
-		<a href="/movies/create" class="uppercase border border-gray-500 text-lg py-4 px-6 rounded transition transition-all bg-gray-800 text-white hover:bg-white hover:text-gray-800">
+		<a href="/movies/create" class="uppercase border border-gray-500 text-lg py-4 px-6 rounded transition-all bg-gray-800 text-white hover:bg-white hover:text-gray-800">
 			Create New movie
 		</a>
 	</div>
@@ -31,14 +32,15 @@
 
 				<span class="text-gray-500">
 					By
-					<span class="italic text-sm text-gray-800">Code With Dary | 28.01.2022
+					<span class="italic text-sm text-gray-800">{{author}}
+						| 28.01.2022
 					</span>
 
 					<p class="text-base text-gray-700 pt-4 pb-10 leading-8 font-light">
 						{{ movie.description }}
 					</p>
 
-					<a href="/movies/{{ movie.id }}" class="uppercase border border-gray-500 text-gray-600 text-lg py-4 px-12 rounded transition transition-all hover:bg-gray-800 hover:text-white">
+					<a href="/movies/{{ movie.id }}" class="uppercase border border-gray-500 text-gray-600 text-lg py-4 px-12 rounded transition-all hover:bg-gray-800 hover:text-white">
 						Keep Reading
 					</a>
 				</div>
