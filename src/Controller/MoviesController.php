@@ -28,7 +28,7 @@ class MoviesController extends AbstractController
     $movies2 = $this->repository->findBy([], ['id' => 'DESC']);
 
     // dd($movies2);
-    return $this->render('index.html.twig', [
+    return $this->render('movies/index.html.twig', [
       'movies' => $movies2,
     ]);
   }
@@ -40,7 +40,7 @@ class MoviesController extends AbstractController
     $movie = $this->repository->findOneBy(['title' => "The Dark Knight"]);
 
     // dd($movie);
-    return $this->render('index.html.twig', [
+    return $this->render('movies/index.html.twig', [
       'movies' => $movie,
     ]);
   }
