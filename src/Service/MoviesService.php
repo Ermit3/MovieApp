@@ -8,11 +8,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class MoviesService extends AbstractController
 {
-  public function __construct()
-  {
-
-  }
-
   public function buildImagePath($imagePath, $movie)
   {
     $newFileName = uniqid() . '.' . $imagePath->guessExtension();
