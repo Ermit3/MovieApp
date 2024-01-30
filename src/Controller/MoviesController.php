@@ -128,4 +128,13 @@ class MoviesController extends AbstractController
       'form' => $form->createView(),
     ]);
   }
+
+  #[Route('/movies/delete/{id}/', name: 'movies_delete', methods:['GET','DELETE'])]
+  public function delete($id,): Response
+  {
+    $movie = $this->repository->find($id);
+    $this->em->remove($movie);
+    $this->em->flush();
+    return $this->redirectToRoute('movies');
+  }
 }
