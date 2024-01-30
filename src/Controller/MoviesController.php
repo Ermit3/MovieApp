@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Movie;
 use App\Form\MovieFormType;
 use App\Repository\MovieRepository;
+use App\Service\MoviesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,11 +17,13 @@ class MoviesController extends AbstractController
 {
   private $repository;
   private $em;
+  private $moviesService;
 
-  public function __construct(EntityManagerInterface $em)
+  public function __construct(EntityManagerInterface $em, MoviesService $moviesService)
   {
     $this->repository = $em->getRepository(Movie::class);
     $this->em = $em;
+    $this->moviesService = $moviesService;
   }
   #[Route('/', name: 'movies', methods: ['GET'])]
   public function index(MovieRepository $movieRepository): Response
@@ -49,18 +52,20 @@ class MoviesController extends AbstractController
       $imagePath = $form->get('imagePath')->getData();
 
       if ($imagePath) {
-        $newFileName = uniqid() . '.' . $imagePath->guessExtension();
+        // $newFileName = uniqid() . '.' . $imagePath->guessExtension();
 
-        try {
-          $imagePath->move(
-            $this->getParameter('kernel.project_dir') . '/public/uploads',
-            $newFileName
-          );
-        } catch (FileException $e) {
-          return new Response($e->getMessage());
-        }
+        // try {
+        //   $imagePath->move(
+        //     $this->getParameter('kernel.project_dir') . '/public/uploads',
+        //     $newFileName
+        //   );
+        // } catch (FileException $e) {
+        //   return new Response($e->getMessage());
+        // }
 
-        $newMovie->setImagePath('/uploads/' . $newFileName);
+        // $newMovie->setImagePath('/uploads/' . $newFileName);
+        $this->moviesService->buildImagePath($imagePath, $newMovie);
+
       }
 
       $this->em->persist($newMovie);
@@ -99,18 +104,7 @@ class MoviesController extends AbstractController
       if ($imagePath) {
         if ($movie->getImagePath() !== null) {
           if (file_exists($this->getParameter('kernel.project_dir') . '/public' . $movie->getImagePath())) {
-            $newFileName = uniqid() . '.' . $imagePath->guessExtension();
-
-            try {
-              $imagePath->move(
-                $this->getParameter('kernel.project_dir') . '/public/uploads',
-                $newFileName
-              );
-            } catch (FileException $e) {
-              return new Response($e->getMessage());
-            }
-    
-            $movie->setImagePath('/uploads/' . $newFileName);
+            $this->moviesService->buildImagePath($imagePath, $movie);
             $this->em->flush();
           }
         }
@@ -122,15 +116,15 @@ class MoviesController extends AbstractController
         $this->em->flush();
       }
 
-      return $this->redirectToRoute('movies_show', ['id'=> $id]);
+      return $this->redirectToRoute('movies_show', ['id' => $id]);
     }
     return $this->render('movies/edit.html.twig', [
       'form' => $form->createView(),
     ]);
   }
 
-  #[Route('/movies/delete/{id}/', name: 'movies_delete', methods:['GET','DELETE'])]
-  public function delete($id,): Response
+  #[Route('/movies/delete/{id}/', name: 'movies_delete', methods: ['GET', 'DELETE'])]
+  public function delete($id, ): Response
   {
     $movie = $this->repository->find($id);
     $this->em->remove($movie);
