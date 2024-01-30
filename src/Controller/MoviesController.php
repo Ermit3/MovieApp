@@ -7,7 +7,6 @@ use App\Form\MovieFormType;
 use App\Repository\MovieRepository;
 use App\Service\MoviesService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
